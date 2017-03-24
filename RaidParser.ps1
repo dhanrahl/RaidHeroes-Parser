@@ -8,7 +8,7 @@ $RaidDay2 = (Get-Date).AddDays(-2).ToString("M-dd")
 $RaidDayFolder = "$env:USERPROFILE\Dropbox\Raid Parses\$RaidDay1 & $RaidDay2"
 $RaidFolder = Get-ChildItem $FolderPath | Sort-Object -Property CreationTime | Select-Object -Last 1
 $RaidFolderCreation = Get-ChildItem $FolderPath | Where-Object {$_.CreationTime.Date -Match $RaidDay}
-$RaidFolderCreation1 = (Get-Date).AddDays(-3).ToString("M/dd/yyyy")
+$RaidFolderCreation1 = (Get-Date).AddDays(-2).ToString("M/dd/yyyy")
 $RaidFolderCreation2 = Get-ChildItem $FolderPath | Where-Object {$_.CreationTime.Date -Match $RaidFolderCreation1} 
 
 #Variable for File Deletion
