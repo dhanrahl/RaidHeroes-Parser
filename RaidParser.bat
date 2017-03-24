@@ -1,2 +1,2 @@
-PowerShell.exe -Command "& ./RaidParser.ps1"
+PowerShell.exe -ExecutionPolicy Bypass -Command "& ./RaidParser.ps1"
 QUIT
