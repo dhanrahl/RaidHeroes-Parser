@@ -69,7 +69,7 @@ Else {
         If ($RaidFolder = $RaidDay) { #Checks to see if the raid folder that exists is from today, incase of new log file after running the script.
             Write-Host "Failure: Today was not a raid day"
             Pause
-            QUIT
+            exit
         }
         Else { #Determined that there is no folder created for RaidDay1 & RaidDay2, proceed with folder creation and setting directory as $OutputFolder
             New-Item -Path "$env:USERPROFILE\Dropbox\Raid Parses" -Name "$RaidDay1 & $RaidDay2" -ItemType Directory 
