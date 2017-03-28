@@ -1,63 +1,52 @@
 ﻿#Location of Output Folder Path
-$FolderPath = "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder"
+$FolderPath = "$env:USERPROFILE\Dropbox\Raid Parses"
 
 #Variables for Folder Creation; Currently this creates folders with a "M-dd & M-dd" naming scheme for 2 raid days a week.
 $RaidDay = (Get-Date).ToString("M/dd/yyyy")
 $RaidDay1 = (Get-Date).ToString("M-dd")
-$RaidDay2 = (Get-Date).AddDays(-2).ToString("M-dd")
+$RaidDay2 = (Get-Date).AddDays(2).ToString("M-dd")
 $RaidDayFolder = "$env:USERPROFILE\Dropbox\Raid Parses\$RaidDay1 & $RaidDay2"
-$RaidFolder = Get-ChildItem $FolderPath | Sort-Object -Property CreationTime | Select-Object -Last 1
+$RaidFolder = Get-ChildItem "$env:USERPROFILE\Dropbox\Raid Parses\" | Sort-Object -Property CreationTime | Select-Object -Last 1
 $RaidFolderCreation = Get-ChildItem $FolderPath | Where-Object {$_.CreationTime.Date -Match $RaidDay}
 $RaidFolderCreation1 = (Get-Date).AddDays(-2).ToString("M/dd/yyyy")
 $RaidFolderCreation2 = Get-ChildItem $FolderPath | Where-Object {$_.CreationTime.Date -Match $RaidFolderCreation1} 
 
 #Variable for File Deletion
-$TestPatchRemove = Test-Path $FolderPath\*.evtc
+$TestPathRemove = Test-Path "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\*.evtc"
 
 #Locations of Boss EVTC Logs
 $ValeGuardian = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\15438\*.evtc"
 $ValeGuardianCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\15438\*.evtc" | sort LastWriteTime | select -last 1
-$ValeGuardianLog = "$FolderPath\ValeGuardian.evtc"
 
 $Gorseval = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\15429\*.evtc"
 $GorsevalCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\15429\*.evtc" | sort LastWriteTime | select -last 1
-$GorsevalLog = "$FolderPath\Gorseval.evtc"
 
 $Sabetha = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\15375\*.evtc"
 $SabethaCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\15375\*.evtc" | sort LastWriteTime | select -last 1
-$SabethaLog = "$FolderPath\Sabetha.evtc"
 
 $Slothasor = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16123\*.evtc"
 $SlothasorCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16123\*.evtc" | sort LastWriteTime | select -last 1
-$SlothasorLog = "$FolderPath\Slothasor.evtc"
 
 $Matthias = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16115\*.evtc"
 $MatthiasCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16115\*.evtc" | sort LastWriteTime | select -last 1
-$MatthiasLog = "$FolderPath\Matthias.evtc"
 
 $KeepConstruct = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16235\*.evtc"
 $KeepConstructCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16235\*.evtc" | sort LastWriteTime | select -last 1
-$KeepConstructLog = "$FolderPath\KeepConstruct.evtc"
 
 $Xera = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16246\*.evtc"
 $XeraCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\16246\*.evtc" | sort LastWriteTime | select -last 1
-$XeraLog = "$FolderPath\Xera.evtc"
 
 $Cairn = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17194\*.evtc"
 $CairnCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17194\*.evtc" | sort LastWriteTime | select -last 1
-$CairnLog = "$FolderPath\Cairn.evtc"
 
 $MursaatOverseer = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17172\*.evtc"
 $MursaatOverseerCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17172\*.evtc" | sort LastWriteTime | select -last 1
-$MursaatOverseerLog = "$FolderPath\MursaatOverseer.evtc"
 
 $Samarog = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17188\*.evtc"
 $SamarogCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17188\*.evtc" | sort LastWriteTime | select -last 1
-$SamarogLog = "$FolderPath\Samarog.evtc"
 
 $Deimos = "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17154\*.evtc"
 $DeimosCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17154\*.evtc" | sort LastWriteTime | select -last 1
-$DeimosLog = "$FolderPath\Deimos.evtc"
 
 #Checks location of Raid Folders to see if a folder exists for the two raid days. If no folder is present it will create a folder. Else Find and match the last known folder and set it as $OutputFolder for parsing.
 
@@ -66,7 +55,7 @@ If ($RaidFolder = $RaidFolderCreation2) { #Determined today is RaidDay2, setting
     Write-Host "Successfuly set variable for OutputFolder"
 }
 Else {  
-        If ($RaidFolder = $RaidDay) { #Checks to see if the raid folder that exists is from today, incase of new log file after running the script.
+        If ($RaidFolder = $RaidFolderCreation) { #Checks to see if the raid folder that exists is from today, incase of new log file after running the script.
             Write-Host "Failure: Today was not a raid day"
             Pause
             exit
@@ -82,98 +71,99 @@ Else {
 
     if ( (Get-ChildItem $ValeGuardian | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
         #If Get-ChildItem returned TRUE, run Get-ChildItem on directory to copy and rename
-        ($ValeGuardianCopy).CopyTo($ValeGuardianLog)
+        Copy-Item -Path $ValeGuardianCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\ValeGuardian.evtc"
         Write-Host "ValeGuardian has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $ValeGuardianLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\ValeGuardian.evtc"
         }
     else {
         Write-Host "Vale Guardian was NOT created today"
     }  
 
     if ( (Get-ChildItem $Gorseval | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($GorsevalCopy).CopyTo($GorsevalLog)
+        Copy-Item -Path $GorsevalCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Gorseval.evtc"
         Write-Host "Gorseval has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $GorsevalLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Gorseval.evtc"
         }
     else {
         Write-Host "Gorseval was NOT created today"
     }  
 
     if ( (Get-ChildItem $Sabetha | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($SabethaCopy).CopyTo($SabethaLog)
+        Copy-Item -Path $SabethaCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Sabetha.evtc"
         Write-Host "Sabetha has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $SabethaLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Sabetha.evtc"
         }
     else {
         Write-Host "Sabetha was NOT created today"
     }  
 
     if ( (Get-ChildItem $Slothasor | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($SlothasorCopy).CopyTo($SlothasorLog)
+        Copy-Item -Path $SlothasorCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Slothasor.evtc"
         Write-Host "Slothasor has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $SlothasorLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Slothasor.evtc"
         }
     else {
         Write-Host "Slothasor was NOT created today"
     }  
 
-    if ( (Get-ChildItem $Matthias | sort LastWriteTime | select -last 1).LastWriteTime -eq (get-date).Date ) {
-        ($MatthiasCopy).CopyTo($MatthiasLog)
+    if ( (Get-ChildItem $Matthias | sort CreationTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
+        Copy-Item -Path $MatthiasCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Matthias.evtc"
         Write-Host "Matthias has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $MatthiasLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Matthias.evtc"
         }
     else {
         Write-Host "Matthias was NOT created today"
     }  
 
     if ( (Get-ChildItem $KeepConstruct | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($KeepConstructCopy).CopyTo($KeepConstructLog)
+        Copy-Item -Path $KeepConstructCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\KeepConstruct.evtc"
         Write-Host "KeepConstruct has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $KeepConstructLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\KeepConstruct.evtc"
         }
     else {
         Write-Host "Keep Construct was NOT created today"
     }  
 
     if ( (Get-ChildItem $Xera | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($XeraCopy).CopyTo($XeraLog)
+        Copy-Item -Path $XeraCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Xera.evtc"
         Write-Host "Xera has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $XeraLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Xera.evtc"
         }
     else {
         Write-Host "Xera was NOT created today"
     }  
 
     if ( (Get-ChildItem $Cairn | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($CairnCopy).CopyTo($CairnLog)
+        Copy-Item -Path $CairnCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Cairn.evtc"
         Write-Host "Cairn has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $CairnLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Cairn.evtc"
         }
     else {
         Write-Host "Cairn was NOT created today"
     }  
 
     if ( (Get-ChildItem $MursaatOverseer | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($MursaatOverseerCopy).CopyTo($MursaatOverseerLog)
+        Copy-Item -Path $MursaatOverseerCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\MursaatOverseer.evtc"
         Write-Host "MursaatOverseer has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $MursaatOverseerLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\MursaatOverseer.evtc"
         }
     else {
         Write-Host "Mursaat Overseer was NOT created today"
     }  
 
     if ( (Get-ChildItem $Samarog | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($SamarogCopy).CopyTo($SamarogLog)
+        Copy-Item -Path $SamarogCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Samarog.evtc"
         Write-Host "Samarog has been modified today and copied to $FolderPath"
-        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' $SamarogLog
+        &'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Samarog.evtc"
         }
     else {
         Write-Host "Samarog was NOT created today"
     }  
 
     if ( (Get-ChildItem $Deimos | sort LastWriteTime | select -last 1).LastWriteTime -ge (get-date).Date ) {
-        ($DeimosCopy).CopyTo($DeimosLog)
+        Copy-Item -Path $DeimosCopy -Destination "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Deimos.evtc"
         Write-Host "Deimos has been modified today and copied to $OutputFolder."
+		&'C:\Users\D''han Rahl\Desktop\raid_heroes.exe' "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\Deimos.evtc"
         }
     else {
         Write-Host "Deimos was NOT created today."
@@ -181,63 +171,66 @@ Else {
 
 #Renaming log files after being parsed by RaidHeroes.exe
 
- If (Test-Path $FolderPath\ValeGuardian_vg.html) {
-    Rename-Item $FolderPath\ValeGurdian_vg.html "Vale Guardian.html"
+ If (Test-Path $FolderPath\$OutputFolder\ValeGuardian_vg.html) {
+    Rename-Item $FolderPath\$OutputFolder\ValeGuardian_vg.html "Vale Guardian.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Gorseval_gorse.html) {
-    Rename-Item $FolderPath\Gorseval_gorse.html "Gorseval.html"
+ If (Test-Path $FolderPath\$OutputFolder\Gorseval_gorse.html) {
+    Rename-Item $FolderPath\$OutputFolder\Gorseval_gorse.html "Gorseval.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Sabetha_sab.html) {
-    Rename-Item $FolderPath\Sabetha_sab.html "Sabetha.html"
+ If (Test-Path $FolderPath\$OutputFolder\Sabetha_sab.html) {
+    Rename-Item $FolderPath\$OutputFolder\Sabetha_sab.html "Sabetha.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Slothasor_sloth.html) {
-    Rename-Item $FolderPath\Slothasor_sloth.html "Slothasor.html"
+ If (Test-Path $FolderPath\$OutputFolder\Slothasor_sloth.html) {
+    Rename-Item $FolderPath\$OutputFolder\Slothasor_sloth.html "Slothasor.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Matthias_matt.html) {
-    Rename-Item $FolderPath\Matthias_matt.html "Matthias.html"
+ If (Test-Path $FolderPath\$OutputFolder\Matthias_matt.html) {
+    Rename-Item $FolderPath\$OutputFolder\Matthias_matt.html "Matthias.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\KeepConstruct_kc.html) {
-    Rename-Item $FolderPath\KeepConstruct_kc.html "Keep Construct.html"
+ If (Test-Path $FolderPath\$OutputFolder\KeepConstruct_kc.html) {
+    Rename-Item $FolderPath\$OutputFolder\KeepConstruct_kc.html "Keep Construct.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Xera_xera.html) {
-    Rename-Item $FolderPath\Xera_xera.html "Xera.html"
+ If (Test-Path $FolderPath\$OutputFolder\Xera_xera.html) {
+    Rename-Item $FolderPath\$OutputFolder\Xera_xera.html "Xera.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Cairn_cairn.html) {
-    Rename-Item $FolderPath\Cairn_cairn.html "Cairn.html"
+ If (Test-Path $FolderPath\$OutputFolder\Cairn_cairn.html) {
+    Rename-Item $FolderPath\$OutputFolder\Cairn_cairn.html "Cairn.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\MursaatOverseer_mo.html) {
-    Rename-Item $FolderPath\MursaatOverseer_mo.html "Mursaat Overseer.html"
+ If (Test-Path $FolderPath\$OutputFolder\MursaatOverseer_mo.html) {
+    Rename-Item $FolderPath\$OutputFolder\MursaatOverseer_mo.html "Mursaat Overseer.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Samarog_sam.html) {
-    Rename-Item $FolderPath\Samarog_sam.html "Samarog.html"
+ If (Test-Path $FolderPath\$OutputFolder\Samarog_sam.html) {
+    Rename-Item $FolderPath\$OutputFolder\Samarog_sam.html "Samarog.html"
     }
 Else {  }
 
- If (Test-Path $FolderPath\Deimos_dei.html) {
-    Rename-Item $FolderPath\Deimos_dei.html "Deimos.html"
+ If (Test-Path $FolderPath\$OutputFolder\Deimos_dei.html) {
+    Rename-Item $FolderPath\$OutputFolder\Deimos_dei.html "Deimos.html"
     }
 Else {  }
 
-If ($TestPatchRemove -eq $True ){ 
-     Remove-Item $FolderPath\*.evtc
+#Variable for File Deletion
+$TestPathRemove = Test-Path "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\*.evtc"
+
+If ($TestPathRemove -eq $True){ 
+     Remove-Item "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\*.evtc"
      Write-Host Files have been removed
 }
 Else { Write-Host No files to remove }
