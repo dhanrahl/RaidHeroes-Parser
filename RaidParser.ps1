@@ -53,17 +53,19 @@ $DeimosCopy = Get-ChildItem "$env:USERPROFILE\Documents\arcdps\arcdps.cbtlogs\17
 If ($RaidFolder = $RaidFolderCreation2) { #Determined today is RaidDay2, setting directory as $OutputFolder
     New-Variable -ErrorAction Ignore -Name "OutputFolder" -Value (Get-ChildItem -Directory -Path "$env:USERPROFILE\Dropbox\Raid Parses" | Sort-Object -Property CreationTime | select -last 1)
     Write-Host "Successfuly set variable for OutputFolder"
+    CD "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\"
 }
 Else {  
         If ($RaidFolder = $RaidFolderCreation) { #Checks to see if the raid folder that exists is from today, incase of new log file after running the script.
             Write-Host "Failure: Today was not a raid day"
             Pause
-            exit
+            QUIT
         }
         Else { #Determined that there is no folder created for RaidDay1 & RaidDay2, proceed with folder creation and setting directory as $OutputFolder
             New-Item -Path "$env:USERPROFILE\Dropbox\Raid Parses" -Name "$RaidDay1 & $RaidDay2" -ItemType Directory 
             New-Variable -ErrorAction Ignore -Name "OutputFolder" -Value (Get-ChildItem -Directory -Path "$env:USERPROFILE\Dropbox\Raid Parses" | Sort-Object -Property CreationTime | select -last 1)
             Write-Host "Successfully created new parse folder and set OutputFolder variable" 
+            CD "$env:USERPROFILE\Dropbox\Raid Parses\$OutputFolder\"
         }
 }
 
